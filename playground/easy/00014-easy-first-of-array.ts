@@ -22,7 +22,8 @@
 
 /* _____________ Your Code Here _____________ */
 
-type First<T extends any[]> = any
+type First<T extends any[]> = T['length'] extends 0 ? never : T[0];
+
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
