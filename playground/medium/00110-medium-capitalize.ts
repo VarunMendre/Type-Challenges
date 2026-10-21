@@ -20,7 +20,7 @@
 
 type MyCapitalize<S extends string> = S extends `${infer X}${infer Rest}`
   ? `${Uppercase<X>}${Rest}`
-  : S;
+  : S;  
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from "@type-challenges/utils";

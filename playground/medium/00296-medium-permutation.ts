@@ -16,7 +16,7 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Permutation<T> = any
+type Permutation<T, K = T> = [T] extends [never] ? [] : K extends K ? [K, ...Permutation<Exclude<T, K>>] : never;
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -29,7 +29,8 @@ type cases = [
   Expect<Equal<Permutation<never>, []>>,
 ]
 
-/* _____________ Further Steps _____________ */
+/* _____________ Further Steps _____________ */ 
+
 /*
   > Share your solutions: https://tsch.js.org/296/answer
   > View solutions: https://tsch.js.org/296/solutions
