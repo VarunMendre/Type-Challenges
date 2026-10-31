@@ -40,7 +40,7 @@ type PartialByKeys<T, K extends keyof T = keyof T> = IntersectionToObj<
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from "@type-challenges/utils";
 
-interface User {
+interface User { 
   name: string;
   age: number;
   address: string;
