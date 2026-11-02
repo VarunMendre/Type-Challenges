@@ -23,27 +23,40 @@
 
 /* _____________ Your Code Here _____________ */
 
-type ObjectEntries<T> = any
+type ObjectEntries<T> = {
+  [K in keyof T]-?: [K, T[K]];
+}[keyof T];
 
 /* _____________ Test Cases _____________ */
-import type { Equal, Expect } from '@type-challenges/utils'
+import type { Equal, Expect } from "@type-challenges/utils";
 
 interface Model {
-  name: string
-  age: number
-  locations: string[] | null
+  name: string;
+  age: number;
+  locations: string[] | null;
 }
 
-type ModelEntries = ['name', string] | ['age', number] | ['locations', string[] | null]
-type PartialModelEntries = ['name', string | undefined] | ['age', number | undefined] | ['locations', string[] | null | undefined]
+type ModelEntries =
+  | ["name", string]
+  | ["age", number]
+  | ["locations", string[] | null];
+type PartialModelEntries =
+  | ["name", string | undefined]
+  | ["age", number | undefined]
+  | ["locations", string[] | null | undefined];
 
 type cases = [
   Expect<Equal<ObjectEntries<Model>, ModelEntries>>,
   Expect<Equal<ObjectEntries<Partial<Model>>, PartialModelEntries>>,
-  Expect<Equal<ObjectEntries<{ key?: undefined }>, ['key', undefined]>>,
-  Expect<Equal<ObjectEntries<{ key: undefined }>, ['key', undefined]>>,
-  Expect<Equal<ObjectEntries<{ key: string | undefined }>, ['key', string | undefined]>>,
-]
+  Expect<Equal<ObjectEntries<{ key?: undefined }>, ["key", undefined]>>,
+  Expect<Equal<ObjectEntries<{ key: undefined }>, ["key", undefined]>>,
+  Expect<
+    Equal<
+      ObjectEntries<{ key: string | undefined }>,
+      ["key", string | undefined]
+    >
+  >,
+];
 
 /* _____________ Further Steps _____________ */
 /*

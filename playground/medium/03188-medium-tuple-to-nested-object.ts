@@ -18,17 +18,28 @@
 
 /* _____________ Your Code Here _____________ */
 
-type TupleToNestedObject<T, U> = any
+type TupleToNestedObject<T, U> = T extends []
+  ? U
+  : T extends [infer First, ...infer Rest]
+    ? First extends string
+      ? { [K in First]: TupleToNestedObject<Rest, U> }
+      : never
+    : never;
 
 /* _____________ Test Cases _____________ */
-import type { Equal, Expect } from '@type-challenges/utils'
+import type { Equal, Expect } from "@type-challenges/utils";.023
 
 type cases = [
-  Expect<Equal<TupleToNestedObject<['a'], string>, { a: string }>>,
-  Expect<Equal<TupleToNestedObject<['a', 'b'], number>, { a: { b: number } }>>,
-  Expect<Equal<TupleToNestedObject<['a', 'b', 'c'], boolean>, { a: { b: { c: boolean } } }>>,
+  Expect<Equal<TupleToNestedObject<["a"], string>, { a: string }>>,
+  Expect<Equal<TupleToNestedObject<["a", "b"], number>, { a: { b: number } }>>,
+  Expect<
+    Equal<
+      TupleToNestedObject<["a", "b", "c"], boolean>,
+      { a: { b: { c: boolean } } }
+    >
+  >,
   Expect<Equal<TupleToNestedObject<[], boolean>, boolean>>,
-]
+];
 
 /* _____________ Further Steps _____________ */
 /*
