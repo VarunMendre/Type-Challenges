@@ -21,10 +21,29 @@
 
 /* _____________ Your Code Here _____________ */
 
-type FlattenDepth = any
+type FlattenDepthOnce<T> = T extends [infer First, ...infer Rest]
+  ? First extends any[]
+    ? [...First, ...FlattenDepthOnce<Rest>]
+    : [First, ...FlattenDepthOnce<Rest>]
+  : [];
+
+type HasNestedArray<T extends unknown[]> = T extends [
+  infer First,
+  ...infer Rest,
+]
+  ? First extends unknown[]
+    ? true
+    : HasNestedArray<Rest>
+  : false;
+
+type FlattenDepth<T extends unknown[], D extends number = 1, U extends unknown[] = []> =
+  D extends never
+  ? T : D extends U["length"]
+  ? T : HasNestedArray<T> extends true
+  ? FlattenDepth<FlattenDepthOnce<T>, D, [0, ...U]> : T;
 
 /* _____________ Test Cases _____________ */
-import type { Equal, Expect } from '@type-challenges/utils'
+import type { Equal, Expect } from "@type-challenges/utils";
 
 type cases = [
   Expect<Equal<FlattenDepth<[]>, []>>,
@@ -33,8 +52,10 @@ type cases = [
   Expect<Equal<FlattenDepth<[1, 2, [3, 4], [[[5]]]], 2>, [1, 2, 3, 4, [5]]>>,
   Expect<Equal<FlattenDepth<[1, 2, [3, 4], [[[5]]]]>, [1, 2, 3, 4, [[5]]]>>,
   Expect<Equal<FlattenDepth<[1, [2, [3, [4, [5]]]]], 3>, [1, 2, 3, 4, [5]]>>,
-  Expect<Equal<FlattenDepth<[1, [2, [3, [4, [5]]]]], 19260817>, [1, 2, 3, 4, 5]>>,
-]
+  Expect<
+    Equal<FlattenDepth<[1, [2, [3, [4, [5]]]]], 19260817>, [1, 2, 3, 4, 5]>
+  >,
+];
 
 /* _____________ Further Steps _____________ */
 /*
