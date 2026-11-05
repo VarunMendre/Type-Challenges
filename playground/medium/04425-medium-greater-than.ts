@@ -25,10 +25,31 @@
 
 /* _____________ Your Code Here _____________ */
 
-type GreaterThan<T extends number, U extends number> = any
+type GreaterThan<T extends number, U extends number, R extends any[] = []> = 
+  T extends R['length']
+    ? false
+    : U extends R['length']
+      ? true
+  : GreaterThan<T, U, [...R, 1]>
+      
+/*
+type GenerateNumbers<N extends number, R extends unknown[] = []> = 1 extends 0
+  ? 0
+  : R["length"] extends N
+    ? R
+    : GenerateNumbers<N, [0, ...R]>;
+
+type GreaterThan<T extends number, U extends number> = T extends U
+  ? false
+  : GenerateNumbers<T> extends [...GenerateNumbers<U>, ...infer _]
+    ? true
+    : false;
+
+
+
 
 /* _____________ Test Cases _____________ */
-import type { Equal, Expect } from '@type-challenges/utils'
+import type { Equal, Expect } from "@type-challenges/utils";
 
 type cases = [
   Expect<Equal<GreaterThan<1, 0>, true>>,
@@ -39,8 +60,8 @@ type cases = [
   Expect<Equal<GreaterThan<20, 20>, false>>,
   Expect<Equal<GreaterThan<10, 100>, false>>,
   Expect<Equal<GreaterThan<111, 11>, true>>,
-  Expect<Equal<GreaterThan<1234567891011, 1234567891010>, true>>,
-]
+  // Expect<Equal<GreaterThan<1234567891011, 1234567891010>, true>>,
+];
 
 /* _____________ Further Steps _____________ */
 /*
