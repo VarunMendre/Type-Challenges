@@ -18,16 +18,23 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Without<T, U> = any
+type Without<T extends unknown[], U extends unknown[] | unknown> = T extends [
+  infer F,
+  ...infer R,
+]
+  ? F extends (U extends unknown[] ? U[number] : U)
+    ? Without<R, U>
+    : [F, ...Without<R, U>]
+  : T;
 
 /* _____________ Test Cases _____________ */
-import type { Equal, Expect } from '@type-challenges/utils'
+import type { Equal, Expect } from "@type-challenges/utils";
 
 type cases = [
   Expect<Equal<Without<[1, 2], 1>, [2]>>,
   Expect<Equal<Without<[1, 2, 4, 1, 5], [1, 2]>, [4, 5]>>,
   Expect<Equal<Without<[2, 3, 2, 3, 2, 3, 2, 3], [2, 3]>, []>>,
-]
+];
 
 /* _____________ Further Steps _____________ */
 /*
